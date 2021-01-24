@@ -80,6 +80,9 @@ export function getMiddleware(type) {
  *         The next middleware to run.
  */
 export function setSource(player, src, next) {
+  if (src.type === 'video/youtube') {
+    setYouTubePlayerEventHooks(player);
+  }
   player.setTimeout(() => setSourceHelper(src, middlewares[src.type], next, player), 1);
 }
 
@@ -329,5 +332,17 @@ function setSourceHelper(src = {}, middleware = [], next, player, acc = [], last
     next(src, acc);
   } else {
     setSourceHelper(src, middlewares['*'], next, player, acc, true);
+  }
+}
+
+function setYouTubePlayerEventHooks(player) {
+  const ytIFrameTagName = player.options_.id + '_html5_api';
+
+  for (const propName in player.options_) {
+    if (propName.substr(0, 2) === 'on') {
+      if (player.options_[propName] !== null) {
+        Window.document.getElementById(ytIFrameTagName).addEventListener(propName, player.options_[propName]);
+      }
+    }
   }
 }

@@ -1,0 +1,3 @@
+D:\Source_Code\Visual_Studio\Projects\SalesTalk\video.js\obj\Debug\NodejsApp1.njsprojAssemblyReference.cache
+D:\Source_Code\Visual_Studio\Projects\SalesTalk\video.js\obj\Debug\NodejsApp1.njsproj.CoreCompileInputs.cache
+D:\Source_Code\Visual_Studio\Projects\SalesTalk\video.js\bin\Microsoft.NodejsTools.WebRole.dll
