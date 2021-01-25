@@ -1,7 +1,5 @@
 ﻿{
-"env": {
-    "browser": true,
-    "node": true,
-    "jasmine": true
-  }
+    "rules": {
+        "no-unused-expressions": "off"
+    }
 }

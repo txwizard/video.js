@@ -336,12 +336,14 @@ function setSourceHelper(src = {}, middleware = [], next, player, acc = [], last
 }
 
 function setYouTubePlayerEventHooks(player) {
-  const ytIFrameTagName = player.options_.id + '_html5_api';
-
   for (const propName in player.options_) {
     if (propName.substr(0, 2) === 'on') {
       if (player.options_[propName] !== null) {
-        Window.document.getElementById(ytIFrameTagName).addEventListener(propName, player.options_[propName]);
+        const fnEventSink = function() {
+          player.options_[propName];
+        };
+
+        player.children_[0].addEventListener(propName, fnEventSink);
       }
     }
   }
