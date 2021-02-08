@@ -52,10 +52,10 @@ export function use(type, middleware) {
  * Gets middlewares by type (or all middlewares).
  *
  * @param  {string} type
- *         The MIME type to match or `"*"` for all MIME types.
+ *         The MIME type to match or `"*"` for all MIME types
  *
  * @return {Function[]|undefined}
- *         An array of middlewares or `undefined` if none exist.
+ *         An array of middlewares or `undefined` if none exist
  */
 export function getMiddleware(type) {
   if (type) {
@@ -90,10 +90,10 @@ export function setSource(player, src, next) {
  * When the tech is set, passes the tech to each middleware's `setTech` method.
  *
  * @param {Object[]} middleware
- *        An array of middleware instances.
+ *        An array of middleware instances
  *
  * @param {Tech} tech
- *        A Video.js tech.
+ *        A Video.js tech
  */
 export function setTech(middleware, tech) {
   middleware.forEach((mw) => mw.setTech && mw.setTech(tech));
@@ -121,22 +121,22 @@ export function get(middleware, tech, method) {
 
 /**
  * Takes the argument given to the player and calls the setter method on each
- * middleware from left to right to the tech.
+ * middleware from left to right to the tech
  *
  * @param  {Object[]} middleware
- *         An array of middleware instances.
+ *         An array of middleware instances
  *
  * @param  {Tech} tech
- *         The current tech.
+ *         The current tech
  *
  * @param  {string} method
- *         A method name.
+ *         A method name
  *
  * @param  {Mixed} arg
- *         The value to set on the tech.
+ *         The value to set on the tech
  *
  * @return {Mixed}
- *         The return value of the `method` of the `tech`.
+ *         The return value of the `method` of the `tech`
  */
 export function set(middleware, tech, method, arg) {
   return tech[method](middleware.reduce(middlewareIterator(method), arg));
@@ -144,7 +144,7 @@ export function set(middleware, tech, method, arg) {
 
 /**
  * Takes the argument given to the player and calls the `call` version of the
- * method on each middleware from left to right.
+ * method on each middleware from left to right
  *
  * Then, call the passed in method on the tech and return the result unchanged
  * back to the player, through middleware, this time from right to left.
@@ -153,17 +153,17 @@ export function set(middleware, tech, method, arg) {
  *         An array of middleware instances.
  *
  * @param  {Tech} tech
- *         The current tech.
+ *         The current tech
  *
  * @param  {string} method
- *         A method name.
+ *         A method name
  *
  * @param  {Mixed} arg
- *         The value to set on the tech.
+ *         The value to set on the tech
  *
  * @return {Mixed}
  *         The return value of the `method` of the `tech`, regardless of the
- *         return values of middlewares.
+ *         return values of middlewares
  */
 export function mediate(middleware, tech, method, arg = null) {
   const callMethod = 'call' + toTitleCase(method);
@@ -288,16 +288,16 @@ function getOrCreateFactory(player, mwFactory) {
 function setSourceHelper(src = {}, middleware = [], next, player, acc = [], lastRun = false) {
   const [mwFactory, ...mwrest] = middleware;
 
-  // if mwFactory is a string, then we're at a fork in the road
+  // if mwFactory is a string, then we're at a fork in the road.
   if (typeof mwFactory === 'string') {
     setSourceHelper(src, middlewares[mwFactory], next, player, acc, lastRun);
 
   // if we have an mwFactory, call it with the player to get the mw,
-  // then call the mw's setSource method
+  // then call the mw's setSource method.
   } else if (mwFactory) {
     const mw = getOrCreateFactory(player, mwFactory);
 
-    // if setSource isn't present, implicitly select this middleware
+    // if setSource isn't present, implicitly select this middleware.
     if (!mw.setSource) {
       acc.push(mw);
       return setSourceHelper(src, mwrest, next, player, acc, lastRun);
@@ -305,17 +305,17 @@ function setSourceHelper(src = {}, middleware = [], next, player, acc = [], last
 
     mw.setSource(assign({}, src), function(err, _src) {
 
-      // something happened, try the next middleware on the current level
-      // make sure to use the old src
+      // Something happened; try the next middleware on the current level, and
+      // make sure to use the old src.
       if (err) {
         return setSourceHelper(src, mwrest, next, player, acc, lastRun);
       }
 
-      // we've succeeded, now we need to go deeper
+      // We've succeeded, now we need to go deeper.
       acc.push(mw);
 
-      // if it's the same type, continue down the current chain
-      // otherwise, we want to go down the new chain
+      // If it's the same type, continue down the current chain.
+      // Otherwise, we want to go down the new chain.
       setSourceHelper(
         _src,
         src.type === _src.type ? mwrest : middlewares[_src.type],
@@ -343,7 +343,7 @@ function setYouTubePlayerEventHooks(player) {
           player.options_[propName];
         };
 
-        player.children_[0].addEventListener(propName, fnEventSink);
+        window.document.getElementById(player.tag.id).addEventListener(propName.substring(2), fnEventSink);
       }
     }
   }
